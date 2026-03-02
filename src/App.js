@@ -508,14 +508,14 @@ export default function App() {
     sessionStartedAt.current = new Date();
 
     // Fire-and-forget Supabase — don't block call start
-    // Promise.all([
-    //   createSession(sessionId),
-    //   createCustomerInfo(sessionId),
-    // ]).catch(err => console.warn('[Supabase] Session init failed:', err.message));
+    Promise.all([
+      createSession(sessionId),
+      createCustomerInfo(sessionId),
+    ]).catch(err => console.warn('[Supabase] Session init failed:', err.message));
 
-    createSession(sessionId)
-      .then(() => createCustomerInfo(sessionId))
-      .catch(err => console.warn('[Supabase] Session init failed:', err.message));
+    // createSession(sessionId)
+    //   .then(() => createCustomerInfo(sessionId))
+    //   .catch(err => console.warn('[Supabase] Session init failed:', err.message));
 
     await startMicRecording();
     rec.start();
