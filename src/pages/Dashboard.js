@@ -209,33 +209,29 @@ export default function Dashboard() {
     const cutoff = timeRange === 'all' ? null
       : new Date(Date.now() - (timeRange === '7d' ? 7 : 30) * 86400000).toISOString();
 
+    // Sequential requests — prevents simultaneous HTTP/3 connection failures (525)
     let sq = supabase.from('sessions').select('*').order('started_at', { ascending: false });
     if (cutoff) sq = sq.gte('started_at', cutoff);
+    const { data: sData, error: sErr } = await sq;
+    if (sErr) console.error('[Dashboard] sessions:', sErr.message);
+    setSessions(sData || []);
 
     let cq = supabase.from('customer_info').select('*').order('created_at', { ascending: false });
     if (cutoff) cq = cq.gte('created_at', cutoff);
+    const { data: cData, error: cErr } = await cq;
+    if (cErr) console.error('[Dashboard] customer_info:', cErr.message);
+    setCustomers(cData || []);
 
     let hq = supabase.from('handoffs').select('*').order('triggered_at', { ascending: false });
     if (cutoff) hq = hq.gte('triggered_at', cutoff);
-
-    const aq = supabase.from('human_agents').select('*').order('name');
-
-    const [
-      { data: sData, error: sErr },
-      { data: cData, error: cErr },
-      { data: hData, error: hErr },
-      { data: aData, error: aErr },
-    ] = await Promise.all([sq, cq, hq, aq]);
-
-    if (sErr) console.error('[Dashboard] sessions:', sErr.message);
-    if (cErr) console.error('[Dashboard] customer_info:', cErr.message);
+    const { data: hData, error: hErr } = await hq;
     if (hErr) console.error('[Dashboard] handoffs:', hErr.message);
-    if (aErr) console.error('[Dashboard] human_agents:', aErr.message);
+    setHandoffs(hData || []);
 
-    setSessions(sData  || []);
-    setCustomers(cData || []);
-    setHandoffs(hData  || []);
-    setAgents(aData    || []);
+    const { data: aData, error: aErr } = await supabase.from('human_agents').select('*').order('name');
+    if (aErr) console.error('[Dashboard] human_agents:', aErr.message);
+    setAgents(aData || []);
+
     setLastRefresh(new Date());
     setLoading(false);
   }, [timeRange]);
