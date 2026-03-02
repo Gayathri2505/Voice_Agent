@@ -695,7 +695,6 @@ export default function App() {
 
       <footer className="footer">
         <span>© 2025 AIS Glass · Powered by Voice Intelligence</span>
-        <span>Best experienced in Chrome</span>
       </footer>
 
       <audio ref={audioPlayerRef} />
