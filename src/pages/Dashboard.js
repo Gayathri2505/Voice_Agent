@@ -377,7 +377,31 @@ export default function Dashboard() {
               </div>
             </section>
 
+            <section className="dash-card table-card">
+              <div className="card-head"><h3>Recent Sessions</h3><span className="card-sub">Last {Math.min(sessions.length, 8)}</span></div>
+              <div className="table-wrap">
+                <table className="sessions-table">
+                  <thead><tr><th>Session ID</th><th>Started</th><th>Duration</th><th>Status</th></tr></thead>
+                  <tbody>
+                    {sessions.slice(0, 8).map(s => (
+                      <tr key={s.id} className={s.status === 'attending' ? 'row-live' : ''}>
+                        <td className="col-id"><span className="id-pill">{s.session_id?.toString().slice(0,8).toUpperCase()}</span></td>
+                        <td className="col-time">{fmtTime(s.started_at)}</td>
+                        <td className="col-dur">{fmtDuration(s.duration_seconds)}</td>
+                        <td><Badge status={s.status} /></td>
+                      </tr>
+                    ))}
+                    {sessions.length === 0 && <tr><td colSpan={4} className="table-empty">No sessions found</td></tr>}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
             <section className="dash-grid-2">
+              <div className="dash-card">
+                <div className="card-head"><h3>Duration Buckets</h3></div>
+                <DurationBuckets sessions={sessions} />
+              </div>
               <div className="dash-card">
                 <div className="card-head"><h3>Customer Intent</h3><span className="card-sub">{customers.filter(c => c.intent).length} with intent</span></div>
                 {intentList.length === 0 ? <p className="empty-state">No intent data yet</p> : (
@@ -390,50 +414,6 @@ export default function Dashboard() {
                     ))}
                   </div>
                 )}
-              </div>
-              <div className="dash-card">
-                <div className="card-head"><h3>Customer Info Collected</h3><span className="card-sub">{customers.length} records</span></div>
-                <div className="ci-stats">
-                  {[
-                    { label: 'Name captured',  val: customers.filter(c => c.name).length },
-                    { label: 'Email captured', val: customers.filter(c => c.email).length },
-                    { label: 'Phone captured', val: customers.filter(c => c.phone).length },
-                    { label: 'Intent tagged',  val: customers.filter(c => c.intent).length },
-                    { label: 'Notes added',    val: customers.filter(c => c.notes).length },
-                  ].map(({ label, val }) => (
-                    <div key={label} className="ci-row">
-                      <span className="ci-label">{label}</span>
-                      <div className="ci-bar-wrap"><div className="ci-bar-fill" style={{ width: `${pct(val, customers.length||1)}%` }} /></div>
-                      <span className="ci-count">{val}<span className="ci-pct"> / {customers.length}</span></span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            <section className="dash-grid-2">
-              <div className="dash-card">
-                <div className="card-head"><h3>Duration Buckets</h3></div>
-                <DurationBuckets sessions={sessions} />
-              </div>
-              <div className="dash-card table-card">
-                <div className="card-head"><h3>Recent Sessions</h3><span className="card-sub">Last {Math.min(sessions.length, 8)}</span></div>
-                <div className="table-wrap">
-                  <table className="sessions-table">
-                    <thead><tr><th>Session ID</th><th>Started</th><th>Duration</th><th>Status</th></tr></thead>
-                    <tbody>
-                      {sessions.slice(0, 8).map(s => (
-                        <tr key={s.id} className={s.status === 'attending' ? 'row-live' : ''}>
-                          <td className="col-id"><span className="id-pill">{s.session_id?.toString().slice(0,8).toUpperCase()}</span></td>
-                          <td className="col-time">{fmtTime(s.started_at)}</td>
-                          <td className="col-dur">{fmtDuration(s.duration_seconds)}</td>
-                          <td><Badge status={s.status} /></td>
-                        </tr>
-                      ))}
-                      {sessions.length === 0 && <tr><td colSpan={4} className="table-empty">No sessions found</td></tr>}
-                    </tbody>
-                  </table>
-                </div>
               </div>
             </section>
           </>}
