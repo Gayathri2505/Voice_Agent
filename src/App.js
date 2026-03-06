@@ -96,12 +96,10 @@ export default function App() {
   const initVoice = () => {
     const voices = window.speechSynthesis.getVoices();
     const preferred = [
-      voices.find(v => v.name === 'Google UK English Female'),
       voices.find(v => v.name === 'Google US English Female'),
       voices.find(v => v.name === 'Google US English'),
       voices.find(v => v.name.toLowerCase().includes('female')),
       voices.find(v => v.lang === 'en-IN'),
-      voices.find(v => v.lang === 'en-GB'),
       voices.find(v => v.lang === 'en-US'),
       voices.find(v => v.lang.startsWith('en')),
     ].find(Boolean);
@@ -167,7 +165,7 @@ export default function App() {
       if (!thinkingAbortRef.current && isProcessingRef.current) {
         startThinkingTimer();
       }
-    }, 5000);
+    }, 10000);
   };
 
   const clearThinkingTimer = () => {
