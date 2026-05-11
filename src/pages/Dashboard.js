@@ -298,7 +298,7 @@ export default function Dashboard() {
       <header className="dash-header">
         <div className="dash-brand">
           <div className="dash-dot" />
-          <span className="dash-logo">AIS<b>Glass</b></span>
+          <span className="dash-logo"><b>Glass Manufacturers</b></span>
           <span className="dash-title-sep">/</span>
           <span className="dash-page-title">Performance Dashboard</span>
         </div>

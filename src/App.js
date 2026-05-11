@@ -7,7 +7,7 @@ const WEBHOOK_URL         = process.env.REACT_APP_WEBHOOK_URL;
 const END_SESSION_WEBHOOK = process.env.REACT_APP_END_SESSION_WEBHOOK_URL;
 
 // Greeting spoken at session start
-const GREETING = "Hello! This is your assistant from AIS Glass. How can I help you today?";
+const GREETING = "Hello! This is your assistant. How can I help you today?";
 
 // "Thinking" messages cycled while waiting > 5s for backend
 const THINKING_MESSAGES = [
@@ -53,7 +53,7 @@ function MessageBubble({ role, text }) {
     <div className={`bubble ${role}`}>
       <div className="bubble-avatar">{role === 'user' ? 'U' : 'A'}</div>
       <div className="bubble-content">
-        <span className="bubble-name">{role === 'user' ? 'You' : 'AIS Glass'}</span>
+        <span className="bubble-name">{role === 'user' ? 'You' : 'Agent'}</span>
         <p>{text}</p>
       </div>
     </div>
@@ -427,7 +427,7 @@ export default function App() {
       // Set speaking state before branching
       isAgentSpeaking.current = true;
       setPhase('speaking');
-      setStatusText('AIS Glass is responding...');
+      setStatusText('Agent is responding...');
 
       const contentType = res.headers.get('Content-Type') || '';
 
@@ -520,7 +520,7 @@ export default function App() {
 
     // Speak greeting immediately, then start listening
     setPhase('speaking');
-    setStatusText('AIS Glass is greeting you...');
+    setStatusText('Agent is greeting you...');
     isAgentSpeaking.current = false; // don't allow VAD interrupt during greeting
 
     await speakText(GREETING);
@@ -599,7 +599,7 @@ export default function App() {
       <nav className="navbar">
         <div className="nav-brand">
           <div className="nav-dot" />
-          <span className="nav-logo">AIS<b>Glass</b></span>
+          <span className="nav-logo"><b>Glass Manufacturers</b></span>
         </div>
         <span className="nav-badge">Voice Intelligence</span>
       </nav>
@@ -610,7 +610,7 @@ export default function App() {
             <p className="eyebrow">Enterprise AI Assistant</p>
             <h1>Talk to your<br /><em>intelligent assistant</em></h1>
             <p className="hero-desc">
-              AIS Glass listens, understands context, and responds with precision.
+              Agent listens, understands context, and responds with precision.
               No commands needed — just speak naturally.
             </p>
           </div>
@@ -692,7 +692,7 @@ export default function App() {
       </main>
 
       <footer className="footer">
-        <span>© 2025 AIS Glass · Powered by Voice Intelligence</span>
+        <span>© 2025 Glass Manufacturers · Powered by Voice Intelligence</span>
       </footer>
 
       <audio ref={audioPlayerRef} />
